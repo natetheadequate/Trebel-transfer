@@ -1,0 +1,3 @@
+#/bin/sh
+
+adb exec-out uiautomator dump /dev/tty > test.xml;
