@@ -1,23 +1,25 @@
-function click(selector,attempt=0) {
+const { Console } = require("console");
+
+function click(selector, attempt) {
     const jsdom = require("jsdom");
-    const getLocation = require("./getLocation");
+    const getLocation = require("./getLocation.js");
     const { JSDOM } = jsdom;
-    const fs = require("fs");
-    const { exec } = require("child_process");
-    const file = exec('adb exec-out uiautomator dump /dev/tty',(a,stdout,z)=>stdout);
-    const dom = new JSDOM(file, {
+    const { execSync } = require("child_process");
+    const file = execSync('adb exec-out uiautomator dump /dev/tty');
+    const filexml=file.toString().replace(/<\/hierarchy>.*/m,'</hierarchy>');
+    const dom = new JSDOM(filexml, {
         contentType: 'text/xml'
     });
     const el = dom.window.document.querySelector(selector);
+    console.log('hih');
     if (el) {
         const [x, y] = getLocation(el);
-        exec('adb shell input tap' + x + y);
+        console.log('hi');
+        execSync('adb shell input tap ' + x + ' ' + y);
         return 0;
     } else {
-        if(attempt<12) {console.log(attempt);setInterval(click(selector,++attempt),500);}
-        else {throw new Error("No such element");}
+        if (attempt < 12) { console.log(attempt); setInterval(click(selector, ++attempt), 500); }
+        else { throw new Error("No such element"); }
     }
 }
-
-
-module.exports={click};
+click(process.argv[2], 0);

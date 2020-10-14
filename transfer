@@ -1,0 +1,4 @@
+#!/bin/sh
+
+restartTrebel.sh;
+echo "Ended";
