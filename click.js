@@ -1,6 +1,5 @@
-const { Console } = require("console");
-
 function click(selector, attempt) {
+    console.log('clicking '+selector+' , attempt='+attempt);
     const jsdom = require("jsdom");
     const getLocation = require("./getLocation.js");
     const { JSDOM } = jsdom;
@@ -11,15 +10,15 @@ function click(selector, attempt) {
         contentType: 'text/xml'
     });
     const el = dom.window.document.querySelector(selector);
-    console.log('hih');
     if (el) {
         const [x, y] = getLocation(el);
-        console.log('hi');
+        console.log('location found ('+x+','+y+')');
         execSync('adb shell input tap ' + x + ' ' + y);
-        return 0;
+        return true;
     } else {
-        if (attempt < 12) { console.log(attempt); setInterval(click(selector, ++attempt), 500); }
-        else { throw new Error("No such element"); }
+        if (attempt < 5) { console.log(attempt); setInterval(click(selector, ++attempt), 500); }
+        else { console.warn("No such element"); }
+        return false;
     }
 }
 click(process.argv[2], 0);

@@ -1,2 +1,4 @@
 closeTrebel.sh;
-node startTrebel.js;
+sleep .1;
+startTrebel.sh;
+goToSearchBar.sh;

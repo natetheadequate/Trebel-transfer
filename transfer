@@ -1,4 +1,5 @@
 #!/bin/sh
 
-restartTrebel.sh;
+startTrebel.sh;
+goToSearchBar.sh 
 echo "Ended";
